@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="shine/shine.vcxproj" Id="44e99a67-200f-4248-be6e-9dd2a1649e27" />
+</Solution>
