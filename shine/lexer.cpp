@@ -27,18 +27,32 @@ public:
 	}
 
 private:
-	std::string input{ "123 - test +" };
+	std::string input{ "123-test+" };
 	std::vector<Token> tokens{};
 
 	int position{};
 	std::string segment{};
 
 	void define() {
-		while (position < input.size() && input[position] != ' ') {
-			segment += input[position];
+		//  Читаем символ -> записываем в segment ->
+		//	-> если встретили + or -: pushToken(); segment = "+"; ->
+		//	-> pushToken() -> продолжаем цикл
+		//	если пробел->увеличиваем position
+
+		while (position < input.size()) {
+			if (input[position] == '+' || input[position] == '-') {
+				pushToken();
+				segment = input[position];
+				pushToken();
+				segment = "";
+			}
+			else if (input[position] == ' ') {
+				position++;
+				continue;
+			}
+			else segment += input[position];
 			position++;
 		}
-		pushToken();
 	}
 
 	void search() {
