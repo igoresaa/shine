@@ -2,19 +2,7 @@
 #include <string>
 #include <vector>
 #include <cctype>
-
-enum class TokenType {
-	Num,
-	Plus,
-	Minus,
-	Unknown,
-};
-
-struct Token
-{
-	TokenType type{};
-	std::string content{};
-};
+#include "lexer.hpp"
 
 class Lexer {
 public:
@@ -25,20 +13,38 @@ public:
 			std::cout << n.content << "\t\ttype: " << static_cast<int>(n.type) << '\n';
 		}
 	}
+	std::vector<Token> tokenize() {
+		return tokens;
+	}
 
 private:
-	std::string input{ "123 - test +" };
+	std::string input{ "1 + 1" };
 	std::vector<Token> tokens{};
 
 	int position{};
 	std::string segment{};
 
 	void define() {
-		while (position < input.size() && input[position] != ' ') {
-			segment += input[position];
+		//  Читаем символ -> записываем в segment ->
+		//	-> если встретили + or -: pushToken(); segment = "+"; ->
+		//	-> pushToken() -> продолжаем цикл
+		//	если пробел->увеличиваем position
+
+		while (position < input.size()) {
+			if (input[position] == '+' || input[position] == '-') {
+				pushToken();
+				segment = input[position];
+				pushToken();
+				segment = "";
+			}
+			else if (input[position] == ' ') {
+				position++;
+				continue;
+			}
+			else segment += input[position];
 			position++;
 		}
-		pushToken();
+		if (segment != "") pushToken();
 	}
 
 	void search() {
@@ -81,11 +87,9 @@ private:
 		return true;
 	}
 };
-
-
-
-int main() {
-	Lexer lexer{};
-	lexer.test();
-	return 0;
-}
+//
+//int main() {
+//	Lexer lexer{};
+//	lexer.test();
+//	return 0;
+//}
