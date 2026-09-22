@@ -2,19 +2,7 @@
 #include <string>
 #include <vector>
 #include <cctype>
-
-enum class TokenType {
-	Num,
-	Plus,
-	Minus,
-	Unknown,
-};
-
-struct Token
-{
-	TokenType type{};
-	std::string content{};
-};
+#include "lexer.hpp"
 
 class Lexer {
 public:
@@ -25,9 +13,12 @@ public:
 			std::cout << n.content << "\t\ttype: " << static_cast<int>(n.type) << '\n';
 		}
 	}
+	std::vector<Token> tokenize() {
+		return tokens;
+	}
 
 private:
-	std::string input{ "123-test+" };
+	std::string input{ "1 + 1" };
 	std::vector<Token> tokens{};
 
 	int position{};
@@ -53,6 +44,7 @@ private:
 			else segment += input[position];
 			position++;
 		}
+		if (segment != "") pushToken();
 	}
 
 	void search() {
@@ -95,11 +87,9 @@ private:
 		return true;
 	}
 };
-
-
-
-int main() {
-	Lexer lexer{};
-	lexer.test();
-	return 0;
-}
+//
+//int main() {
+//	Lexer lexer{};
+//	lexer.test();
+//	return 0;
+//}
